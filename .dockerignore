@@ -1,0 +1,9 @@
+.dockerignore
+Dockerfile
+runtime
+scripts
+.git
+examples
+docs
+handler
+terraform

@@ -1,0 +1,21 @@
+#!/bin/bash
+# https://docs.github.com/en/rest/reference/repos#list-organization-repositories
+
+if [ $# -lt 1 ]; then
+    echo 'usage: list-repos kind name'
+    echo
+    echo '`kind` - one of "users" or "orgs"'
+    exit 1
+fi
+
+kind=$1
+owner=$2
+
+get_repos() {
+    curl -Ls "https://api.github.com/$kind/$owner/repos?per_page=200" \
+        | jq -r '.[].name'
+}
+
+for repo in $(get_repos); do
+    echo https://github.com/$owner/$repo
+done
