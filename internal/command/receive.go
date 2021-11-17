@@ -46,9 +46,13 @@ var receiveCommand = &cobra.Command{
 				defer func() {
 					count += 1
 					if !decode {
-						fmt.Fprintln(os.Stderr, "\rReceived", count)
+						fmt.Fprint(os.Stderr, "\rReceived ", count)
 					}
 				}()
+				if outputDirectory == "" && !decode {
+					return
+				}
+
 				output := &pl.Output{}
 				err = json.Unmarshal([]byte(line), output)
 				if err != nil {
@@ -82,6 +86,7 @@ var receiveCommand = &cobra.Command{
 						}
 					}()
 				}
+				// TODO figure out how to do both with a teereader and io.discard
 				if decode {
 					po := &pl.ProcessOutput{}
 					json.NewDecoder(result.Body).Decode(po)
